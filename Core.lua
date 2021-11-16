@@ -105,7 +105,6 @@ function GuildJoinerator:PLAYER_STARTED_MOVING(event)
 	print(event)
 end
 
-
 function GuildJoinerator:SlashCommand(input, editbox)
 	if input == "main" then
 		self:ToggleMainWindow()

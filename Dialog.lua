@@ -19,9 +19,7 @@ local function safelayoutcall(object, func, ...)
 end
 
 function GuildJoinerator:DestroyMainWindow(widget)
-	if widget == nil then
-		widget = self.main_window
-	end
+	if widget == nil then widget = self.main_window end
 	self.main_window_exists = false
 	self.AceGUI:Release(widget)
 end
@@ -48,7 +46,7 @@ function GuildJoinerator:CreateMainWindow()
 	-- so that it is closed when the escape key is pressed.
 	tinsert(UISpecialFrames, "GuildJoineratorMainWindow")
 
-	--local frame = window.frame
+	-- local frame = window.frame
 
 	local heading = self.AceGUI:Create("Heading")
 	heading:SetText("A big thankyou to " .. self.COLORS.HEIRLOOM .. "Knicks" .. self.COLORS.NORMAL ..
@@ -73,9 +71,22 @@ function GuildJoinerator:CreateMainWindow()
 	editbox:SetText(log_string)
 
 	local dropdown = self.AceGUI:Create("Dropdown")
-	dropdown:SetList({[0] = "Assign me, please!", [1] = "Alpha", [2] = "Bravo", [3] = "Charlie"})
-	dropdown:SetValue(self.db.profile.lastjointype or 0)
-	--dropdown:SetText("Choose your destination")
+	local list = {
+		[0] = "Assign me, please!",
+		[1] = self.db.profile.guilds.primary,
+		[2] = self.db.profile.guilds.secondary, 
+		[3] = self.db.profile.guilds.tertiary,
+	}
+
+	dropdown:SetList(list)
+
+	dropdown:SetItemDisabled(1, not GuildJoinerator.db.profile.guilds.useprimary)
+	dropdown:SetItemDisabled(2, not GuildJoinerator.db.profile.guilds.usesecondary)
+	dropdown:SetItemDisabled(3, not GuildJoinerator.db.profile.guilds.usetertiary)
+
+	dropdown:SetValue(self.db.profile.lastjointype or 1)
+
+	-- dropdown:SetText("Choose your destination")
 	dropdown:SetCallback("OnValueChanged", function(self, event, key)
 		print("Selected:", key)
 		--[[ for k, v in pairs(key) do
@@ -83,13 +94,13 @@ function GuildJoinerator:CreateMainWindow()
 		end ]]
 	end)
 
+	self.dropdown_widget = dropdown
+
 	local button = self.AceGUI:Create("Button")
 	button:SetText("Join")
 	button:SetWidth(200)
 	button:SetCallback("OnClick", function()
-		local value = dropdown:GetValue()
-		self.db.profile.lastjointype = value
-		print("Would be joining:", value )
+		GuildJoinerator:JoinButton_OnClick()
 	end)
 
 	window:AddChild(heading)
@@ -99,3 +110,37 @@ function GuildJoinerator:CreateMainWindow()
 	window:AddChild(editbox)
 
 end
+
+function GuildJoinerator:JoinButton_OnClick()
+	-- if we're searching, this should call JoineratorEngine:Pump()
+	if JoineratorEngine.state == JoineratorEngine.STATES.SEARCHING then
+		JoineratorEngine:Pump()
+		return
+	end
+
+	local value = self.dropdown_widget:GetValue()
+	self.db.profile.lastjointype = value
+	print("Got:", value, "from dropdown")
+	local guild = nil
+	if value == 1 then
+		guild = self.db.profile.guilds.primary
+		print("Using Primary:", guild)
+	elseif value == 2 then
+		guild = self.db.profile.guilds.secondary
+		print("Using Secondary:", guild)
+	elseif value == 3 then
+		guild = self.db.profile.guilds.tertiary
+		print("Using Tertiary:", guild)
+	else
+		guild = nil
+		print("not found")
+	end
+	JoineratorEngine:Init()
+	print("Guild:", guild)
+	if guild then
+		JoineratorEngine:StartSingleSearchStrategy(guild)
+	else
+		print("Probably attempting a multi-search")
+	end
+end
+

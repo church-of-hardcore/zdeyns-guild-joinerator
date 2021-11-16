@@ -131,7 +131,7 @@ GuildJoinerator.options = {
 						GuildJoinerator.options.args.tertiaryGroup.args.tertiaryGuild.disabled = not value
 					end,
 				},
-				teriaryGuild = {
+				tertiaryGuild = {
 					order = 2,
 					type = "input",
 					name = "Tertiary Guild",
@@ -141,7 +141,7 @@ GuildJoinerator.options = {
 						return GuildJoinerator.db.profile.guilds.tertiary
 					end,
 					set = function(info, value)
-						print("Primary Guild set to:", value)
+						print("Tertiary Guild set to:", value)
 						GuildJoinerator.db.profile.guilds.tertiary = value
 					end,
 				},
