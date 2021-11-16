@@ -19,11 +19,14 @@ local function safelayoutcall(object, func, ...)
 end
 
 function GuildJoinerator:DestroyMainWindow(widget)
+	if widget == nil then
+		widget = self.main_window
+	end
 	self.main_window_exists = false
 	self.AceGUI:Release(widget)
 end
 
-function GuildJoinerator:MainWindow()
+function GuildJoinerator:CreateMainWindow()
 	-- This pattern used because GuildJoinerator:DestroyMainWindow() above
 	-- doesn't *hide* the window, it *destroys* it.
 	-- this hard-check prevents reconstructing what's already showing
@@ -31,6 +34,7 @@ function GuildJoinerator:MainWindow()
 	self.main_window_exists = true
 
 	local window = self.AceGUI:Create("Window")
+	self.main_window = window
 	window:SetTitle("Zdeyn's Guild Joinerator")
 	window:SetCallback("OnClose", function(widget)
 		self:DestroyMainWindow(widget)
@@ -44,7 +48,7 @@ function GuildJoinerator:MainWindow()
 	-- so that it is closed when the escape key is pressed.
 	tinsert(UISpecialFrames, "GuildJoineratorMainWindow")
 
-	local frame = window.frame
+	--local frame = window.frame
 
 	local heading = self.AceGUI:Create("Heading")
 	heading:SetText("A big thankyou to " .. self.COLORS.HEIRLOOM .. "Knicks" .. self.COLORS.NORMAL ..
@@ -60,17 +64,17 @@ function GuildJoinerator:MainWindow()
 
 	local editbox = self.AceGUI:Create("MultiLineEditBox")
 	editbox:SetLabel("Log:")
-	local log_string = "Empty!"
-	editbox:SetText(log_string)
 	editbox:SetFullWidth(1)
 	editbox:SetNumLines(24)
 	editbox:DisableButton(true)
 	editbox:SetFocus()
 	editbox:SetDisabled(true)
+	local log_string = "Empty!"
+	editbox:SetText(log_string)
 
 	local dropdown = self.AceGUI:Create("Dropdown")
 	dropdown:SetList({[0] = "Assign me, please!", [1] = "Alpha", [2] = "Bravo", [3] = "Charlie"})
-	dropdown:SetValue(0)
+	dropdown:SetValue(self.db.profile.lastjointype or 0)
 	--dropdown:SetText("Choose your destination")
 	dropdown:SetCallback("OnValueChanged", function(self, event, key)
 		print("Selected:", key)
@@ -83,7 +87,9 @@ function GuildJoinerator:MainWindow()
 	button:SetText("Join")
 	button:SetWidth(200)
 	button:SetCallback("OnClick", function()
-		print("Would be joining:", dropdown:GetValue())
+		local value = dropdown:GetValue()
+		self.db.profile.lastjointype = value
+		print("Would be joining:", value )
 	end)
 
 	window:AddChild(heading)

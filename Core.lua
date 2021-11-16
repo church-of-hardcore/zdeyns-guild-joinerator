@@ -52,10 +52,10 @@ function GuildJoinerator:OnInitialize()
 		icon = "Interface\\Icons\\Inv_misc_summerfest_braziergreen",
 		OnClick = function(clicked_frame, button)
 			if button == "RightButton" then
-				GuildJoinerator:ShowConfig()
-			else
-	
-				GuildJoinerator:MainWindow()
+				-- TODO: If config window is open, close it instead
+				GuildJoinerator:ToggleConfig()
+			else	
+				GuildJoinerator:ToggleMainWindow()
 			end
 		end,
 	
@@ -78,6 +78,7 @@ function GuildJoinerator:OnInitialize()
 	-- https://www.wowace.com/projects/ace3/pages/api/ace-config-registry-3-0
 	self.AC:RegisterOptionsTable("GuildJoinerator_Options", self.options)
 	self.optionsFrame = self.ACD:AddToBlizOptions("GuildJoinerator_Options", "Guild Joinerator")
+	self.customWindowFrame = nil
 
 	-- adds a child options table, in this case our profiles panel
 	local profiles = LibStub("AceDBOptions-3.0"):GetOptionsTable(self.db)
@@ -106,11 +107,14 @@ end
 
 
 function GuildJoinerator:SlashCommand(input, editbox)
-	if input == "options" then
-		self:ShowConfig()
+	if input == "main" then
+		self:ToggleMainWindow()
+
+	elseif input == "options" then
+		self:ToggleConfig()
 
 	elseif input == "toggle" then
-		self:Toggle()
+		self:ToggleMinimap()
 		local state = (self.db.profile.minimap.hide and 'Hidden') or 'Shown'
 		print(COLORS.HEIRLOOM .. "Guild Joinerator:" .. COLORS.NORMAL .. state)
 	
@@ -121,11 +125,22 @@ function GuildJoinerator:SlashCommand(input, editbox)
 		self:Print(COLORS.HEIRLOOM .. "Guild Joinerator" .. COLORS.NORMAL)
 		self:Print(COLORS.LIGHT_BLUE .. "Syntax:" .. COLORS.NORMAL .. " /guildjoinerator [command]")
 		self:Print(COLORS.LIGHT_BLUE .. "Syntax:" .. COLORS.NORMAL .. " /gj [command]")
-		self:Print(COLORS.UNCOMMON .. "Commands:" .. COLORS.NORMAL .. " options toggle join")
+		self:Print(COLORS.UNCOMMON .. "Commands:" .. COLORS.NORMAL .. " main options toggle join")
 	end
 end
 
-function GuildJoinerator:Toggle()
+function GuildJoinerator:ToggleMainWindow()
+	print("Toggling Main Window")
+	if self.main_window_exists then
+		print "Closing.."
+        GuildJoinerator:DestroyMainWindow()
+    else
+		print "Opening.."
+        GuildJoinerator:CreateMainWindow()
+    end
+end
+
+function GuildJoinerator:ToggleMinimap()
 	print("Toggling! Initial value:", self.db.profile.minimap.hide)
 	self.db.profile.minimap.hide = not self.db.profile.minimap.hide
 	
@@ -142,8 +157,22 @@ function GuildJoinerator:UpdateMinimap()
 	end
 end
 
-function GuildJoinerator:ShowConfig()
-	-- https://github.com/Stanzilla/WoWUIBugs/issues/89
-	InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
-	InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
+function GuildJoinerator:ToggleConfig()
+    if self.customWindowFrame then
+        self.ACD:Close("GuildJoinerator_Options")
+		self.customWindowFrame:Release()
+		self.customWindowFrame = nil
+    else
+		self.customWindowFrame = self.AceGUI:Create("Window")
+        self.ACD:Open("GuildJoinerator_Options", self.customWindowFrame)
+    end
 end
+
+--[[ function GuildJoinerator:ShowConfig()
+    if InterfaceOptionsFrame:IsShown() then
+        InterfaceOptionsFrame_Show()
+    else
+        InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
+        InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
+    end
+end ]]
