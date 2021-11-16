@@ -1,0 +1,32 @@
+## Interface: 11401
+## Version: 0.0.1
+## Title: Zdeyn's Hardcore Guild Joinerator
+## Notes: Allows easy self-invites to appropriate Hardcore guilds
+## Author: zdeyn, i.am.zdeyn@gmail.com
+## X-License: All Rights Reserved
+## X-Category: Leveling
+
+## SavedVariables: GuildJoineratorDB
+
+Libs\LibStub\LibStub.lua
+Libs\CallbackHandler-1.0\CallbackHandler-1.0.xml
+Libs\LibDataBroker-1.1\LibDataBroker-1.1.lua
+Libs\LibDBIcon-1.0\LibDBIcon-1.0.lua
+Libs\AceAddon-3.0\AceAddon-3.0.xml
+Libs\AceEvent-3.0\AceEvent-3.0.xml
+Libs\AceTimer-3.0\AceTimer-3.0.xml
+Libs\AceBucket-3.0\AceBucket-3.0.xml
+Libs\AceHook-3.0\AceHook-3.0.xml
+Libs\AceDB-3.0\AceDB-3.0.xml
+Libs\AceDBOptions-3.0\AceDBOptions-3.0.xml
+Libs\AceLocale-3.0\AceLocale-3.0.xml
+Libs\AceConsole-3.0\AceConsole-3.0.xml
+Libs\AceGUI-3.0\AceGUI-3.0.xml
+Libs\AceConfig-3.0\AceConfig-3.0.xml
+Libs\AceComm-3.0\AceComm-3.0.xml
+Libs\AceTab-3.0\AceTab-3.0.xml
+Libs\AceSerializer-3.0\AceSerializer-3.0.xml
+
+Core.lua
+Options.lua
+Dialog.lua
