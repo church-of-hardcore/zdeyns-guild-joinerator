@@ -100,7 +100,7 @@ function GuildJoinerator:CreateMainWindow()
 	window:AddChild(dropdown)
 	window:AddChild(button)
 	window:AddChild(editbox)
-	-- print ("I am in a guild:", IsInGuild())
+	dbprint("I am in a guild:", IsInGuild())
 
 end
 
@@ -113,27 +113,27 @@ function GuildJoinerator:JoinButton_OnClick()
 
 	local value = self.dropdown_widget:GetValue()
 	self.db.profile.lastjointype = value
-	print("Got:", value, "from dropdown")
+	dbprint("Got:", value, "from dropdown")
 	local guild = nil
 	if value == 1 then
 		guild = self.db.profile.guilds.primary
-		print("Using Primary:", guild)
+		dbprint("Using Primary:", guild)
 	elseif value == 2 then
 		guild = self.db.profile.guilds.secondary
-		print("Using Secondary:", guild)
+		dbprint("Using Secondary:", guild)
 	elseif value == 3 then
 		guild = self.db.profile.guilds.tertiary
-		print("Using Tertiary:", guild)
+		dbprint("Using Tertiary:", guild)
 	else
 		guild = nil
-		print("not found")
+		dbprint("not found")
 	end
 	JoineratorEngine:Init()
-	print("Guild:", guild)
+	dbprint("Guild:", guild)
 	if guild then
 		JoineratorEngine:StartSingleSearchStrategy(guild)
 	else
-		print("Probably attempting a multi-search")
+		dbprint("Probably attempting a multi-search")
 	end
 end
 

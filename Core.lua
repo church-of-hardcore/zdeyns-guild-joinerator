@@ -33,16 +33,19 @@ function GuildJoinerator:OnInitialize()
 	self.db = LibStub("AceDB-3.0"):New("GuildJoineratorDB", {
 		profile = {
 			minimap = {
-				hide = false,
+				hide = false, -- this is called 'hide' due to libWhatever needing it that way.. I'd use 'show'
 			},
 			guilds = {
 				useprimary = true,
 				usesecondary = true,
 				usetertiary = true,
-				primary = "Alpha",
-				secondary = "Bravo",
-				tertiary = "Charlie",
-			}
+				primary = "HC Alpha",
+				secondary = "HC Bravo",
+				tertiary = "HC Charlie",				
+			},
+			debug = {
+				show = true
+			},
 		},
 	})
 
@@ -52,7 +55,6 @@ function GuildJoinerator:OnInitialize()
 		icon = "Interface\\Icons\\Inv_misc_summerfest_braziergreen",
 		OnClick = function(clicked_frame, button)
 			if button == "RightButton" then
-				-- TODO: If config window is open, close it instead
 				GuildJoinerator:ToggleConfig()
 			else	
 				GuildJoinerator:ToggleMainWindow()
@@ -97,7 +99,8 @@ function GuildJoinerator:OnInitialize()
 end
 
 function GuildJoinerator.PLAYER_ENTERING_WORLD()	
-	print("Player entering world...")
+	dbprint("Player entering world...")
+
 	StaticPopupDialogs["JoineratorGuildInvitePopup"] = {
 		text = "Do you want to invite %s to your guild?",
 		button1 = "Yes",
@@ -124,40 +127,40 @@ function GuildJoinerator:SlashCommand(input, editbox)
 	elseif input == "toggle" then
 		self:ToggleMinimap()
 		local state = (self.db.profile.minimap.hide and 'Hidden') or 'Shown'
-		print(COLORS.HEIRLOOM .. "Guild Joinerator:" .. COLORS.NORMAL .. state)
+		dbprint(COLORS.HEIRLOOM .. "Guild Joinerator:" .. COLORS.NORMAL .. state)
 	
-	elseif input == "join" then
-		print("I'd join something, but I don't know how yet")
+	--elseif input == "join" then
+	--	print("I'd join something, but I don't know how yet")
 
 	else -- A R G B -> |caarrggb blsadfjsdhf |r default-text blah
 		self:Print(COLORS.HEIRLOOM .. "Guild Joinerator" .. COLORS.NORMAL)
 		self:Print(COLORS.LIGHT_BLUE .. "Syntax:" .. COLORS.NORMAL .. " /guildjoinerator [command]")
 		self:Print(COLORS.LIGHT_BLUE .. "Syntax:" .. COLORS.NORMAL .. " /gj [command]")
-		self:Print(COLORS.UNCOMMON .. "Commands:" .. COLORS.NORMAL .. " main options toggle join")
+		self:Print(COLORS.UNCOMMON .. "Commands:" .. COLORS.NORMAL .. " main options toggle") -- join")
 	end
 end
 
 function GuildJoinerator:ToggleMainWindow()
-	print("Toggling Main Window")
+	dbprint("Toggling Main Window")
 	if self.main_window_exists then
-		print "Closing.."
+		dbprint("Closing..")
         GuildJoinerator:DestroyMainWindow()
     else
-		print "Opening.."
+		dbprint("Opening..")
         GuildJoinerator:CreateMainWindow()
     end
 end
 
 function GuildJoinerator:ToggleMinimap()
-	print("Toggling! Initial value:", self.db.profile.minimap.hide)
+	dbprint("Toggling! Initial value:", self.db.profile.minimap.hide)
 	self.db.profile.minimap.hide = not self.db.profile.minimap.hide
 	
-	print("After value:", self.db.profile.minimap.hide)
+	dbprint("After value:", self.db.profile.minimap.hide)
 	GuildJoinerator:UpdateMinimap()
 end
 
 function GuildJoinerator:UpdateMinimap()
-	print("UPDATING MINI-MAP: Hidden = " ..tostring(self.db.profile.minimap.hide))
+	dbprint("UPDATING MINI-MAP: Hidden = " ..tostring(self.db.profile.minimap.hide))
 	if self.db.profile.minimap.hide then 
 		self.icon:Hide("GuildJoinerator")
 	else
@@ -184,3 +187,9 @@ end
         InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
     end
 end ]]
+
+function dbprint(msg, ...)
+	if self.db.profile.debug.show then
+		print(msg, ...)
+	end
+end

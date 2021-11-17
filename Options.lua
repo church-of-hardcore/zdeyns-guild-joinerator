@@ -52,7 +52,7 @@ GuildJoinerator.options = {
 						return GuildJoinerator.db.profile.guilds.useprimary
 					end,
 					set = function(info, value)
-						print("Use Primary Toggled to: Use =", value)
+						dbprint("Use Primary Toggled to: Use =", value)
 						GuildJoinerator.db.profile.guilds.useprimary = value
 						GuildJoinerator.options.args.primaryGroup.args.primaryGuild.disabled = not value
 					end,
@@ -67,7 +67,7 @@ GuildJoinerator.options = {
 						return GuildJoinerator.db.profile.guilds.primary
 					end,
 					set = function(info, value)
-						print("Primary Guild set to:", value)
+						dbprint("Primary Guild set to:", value)
 						GuildJoinerator.db.profile.guilds.primary = value
 					end,
 				},
@@ -89,7 +89,7 @@ GuildJoinerator.options = {
 						return GuildJoinerator.db.profile.guilds.usesecondary
 					end,
 					set = function(info, value)
-						print("Use Secondary Toggled to: Use =", value)
+						dbprint("Use Secondary Toggled to: Use =", value)
 						GuildJoinerator.db.profile.guilds.usesecondary = value
 						GuildJoinerator.options.args.secondaryGroup.args.secondaryGuild.disabled = not value
 					end,
@@ -104,7 +104,7 @@ GuildJoinerator.options = {
 						return GuildJoinerator.db.profile.guilds.secondary
 					end,
 					set = function(info, value)
-						print("Secondary Guild set to:", value)
+						dbprint("Secondary Guild set to:", value)
 						GuildJoinerator.db.profile.guilds.secondary = value
 					end,
 				},
@@ -126,7 +126,7 @@ GuildJoinerator.options = {
 						return GuildJoinerator.db.profile.guilds.usetertiary
 					end,
 					set = function(info, value)
-						print("Use Tertiary Toggled to: Use =", value)
+						dbprint("Use Tertiary Toggled to: Use =", value)
 						GuildJoinerator.db.profile.guilds.usetertiary = value
 						GuildJoinerator.options.args.tertiaryGroup.args.tertiaryGuild.disabled = not value
 					end,
@@ -141,7 +141,7 @@ GuildJoinerator.options = {
 						return GuildJoinerator.db.profile.guilds.tertiary
 					end,
 					set = function(info, value)
-						print("Tertiary Guild set to:", value)
+						dbprint("Tertiary Guild set to:", value)
 						GuildJoinerator.db.profile.guilds.tertiary = value
 					end,
 				},
@@ -157,7 +157,7 @@ GuildJoinerator.options = {
 				return GuildJoinerator.db.profile.minimap.hide
 			end,
 			set = function(info, value)
-				print("Minimap Toggled to: Hidden =", value)
+				dbprint("Minimap Toggled to: Hidden =", value)
 				GuildJoinerator.db.profile.minimap.hide = value
 				GuildJoinerator:UpdateMinimap()
 			end,
@@ -172,5 +172,5 @@ end
 
 function GuildJoinerator:SetValue(info, value)
 	self.db.profile[info[#info]] = value
-	print("The " .. info[#info] .. " was set to: " .. tostring(value))
+	dbprint("The " .. info[#info] .. " was set to: " .. tostring(value))
 end
