@@ -307,7 +307,7 @@ function JoineratorEngine:ChatFilterOutgoing(_, message, characterName, _)
 	--local current_player = UnitName("player")
 	--print("Player:", current_player)
 	--print("ChatFilter: event, ...", event, ...)
-	short_recipient, _ = strsplit( "-", characterName, 2 )
+	local short_recipient, _ = strsplit( "-", characterName, 2 )
 	--print("Recipient, Me:", short_recipient, current_player)
 	if JoineratorEngine.outgoings[short_recipient] then
 		JoineratorEngine.outgoings[short_recipient] = nil
@@ -320,7 +320,7 @@ end
 function JoineratorEngine:ChatFilterIncoming(_, message, characterName, _)
 	-- local arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12 = ...
 	-- return true, ...
-	short_recipient, _ = strsplit( "-", characterName, 2 )
+	local short_recipient, _ = strsplit( "-", characterName, 2 )
 	print("INBOUND:", message, short_recipient)
 	if not IsInGuild() then 
 		print("I'm not guilded")
