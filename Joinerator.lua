@@ -1,3 +1,5 @@
+
+
 JoineratorCache = {}
 
 function JoineratorCache:Init()
@@ -57,9 +59,9 @@ function JoineratorCache:GetNames(guild)
 			print('Skipping over myself')
 			return
 		end
-		print("n is type:", type(n))
-		print("ls is type:", type(ls))
-		print("g is type:", type(g))
+		--print("n is type:", type(n))
+		--print("ls is type:", type(ls))
+		--print("g is type:", type(g))
 		table.insert(names, n)
 		count = count + 1
 	end
@@ -144,6 +146,9 @@ JoineratorEngine.hooked = false
 function JoineratorEngine:Init()
 	-- Init all of the things - no hooks, just prep
 	print("JoineratorEngine:Init()")
+	ChatFrame_RemoveMessageEventFilter("CHAT_MSG_WHISPER_INFORM", JoineratorEngine.ChatFilterOutgoing)
+	--ChatFrame_RemoveMessageEventFilter("CHAT_MSG_WHISPER", JoineratorEngine.ChatFilterIncoming)
+	--print ("I am in:", GetGuildInfo("player")[1])
 	self:NextState(self.STATES.WAITING)
 end
 
@@ -174,7 +179,14 @@ function JoineratorEngine:NextState(state)
 		else
 			print("Failed to transition from (found):", old_state, "to", state)
 		end
-
+	elseif (old_state == self.STATES.JOINING) then
+		if (state == self.STATES.WAITING) then
+			-- confirm all the things
+			print("Transitioning from:", old_state, "to", state)
+			self.state = state
+		else
+			print("Failed to transition from (found):", old_state, "to", state)
+		end
 	else
 		print("Failed to transition from:", old_state, "to", state)
 	end
@@ -195,21 +207,23 @@ end
 function JoineratorEngine:Pump()
 	-- intended to crank along the /who results
 	if self.state ~= self.STATES.SEARCHING then
-		print("JoineratorEngine:Pump() - returning early, not in the right state:", self.state)
+		--print("JoineratorEngine:Pump() - returning early, not in the right state:", self.state)
 		return -- bail early if we're not in the right state for pumping
 	end
 
 	-- worth putting a 'dont thump the pump' time-out in here to bail early if needed
-	self.JoineratorCache:PruneEntries(time() - 60) -- one minute or older = fried
+	-- self.JoineratorCache:PruneEntries(time() - 60) -- one minute or older = fried
 	-- do we need to re-issue a new search, or something? If so, figure it here
 	if self.strategy == self.STRATEGIES.SINGLE then
 		local names, count = self.JoineratorCache:GetNames(self.target_guild)
-		print("JoineratorEngine:Pump() - Found", tostring(count), "names in guild:", self.target_guild)
+		--print("JoineratorEngine:Pump() - Found", tostring(count), "names in guild:", self.target_guild)
+		if count > 5 then
+			JoineratorEngine:CompleteSingleSearchStrategy(self.target_guild)
+		end
 		return
 	end
 	-- are we just priming the handle with the equivalent of GetNextWho() or ManualWho() or whatever - poke it until results happen!
-	print("JoineratorEngine:Pump() - Pumping!")
-
+	--print("JoineratorEngine:Pump() - Pumping!")
 end
 
 function JoineratorEngine:StartSingleSearchStrategy(target_guild)
@@ -245,15 +259,15 @@ end
 
 function GuildJoinerator:WHO_LIST_UPDATE(event)
 	local numWhoResults = C_FriendList.GetNumWhoResults()
-	local tblWhoResults = nil
 
 	print(event, "Results:", numWhoResults)
 	print("GetWhoInfo()")
 	for i = 1, numWhoResults do
 		p = C_FriendList.GetWhoInfo(i)
 		-- PrintArray(p)
-		print(format("%s: %s of <%s> (level %d %s %s) is in %s as of %s", i, p.fullName, p.fullGuildName, p.level, p.raceStr,
-				p.classStr, p.area, time()))
+		print(format("%s: %s of <%s> (level %d %s %s) is in %s as of %s", 
+			i, p.fullName, p.fullGuildName, p.level, p.raceStr, p.classStr, p.area, time())
+		)
 		JoineratorCache:AddEntry(p.fullGuildName, p.fullName, time())
 	end
 
@@ -262,10 +276,67 @@ function GuildJoinerator:WHO_LIST_UPDATE(event)
 end
 
 function JoineratorEngine:SendInviteRequests(names, count)
+	JoineratorEngine.outgoings = JoineratorEngine.outgoings or {}
+	if not count then 
+		print('Early bail, no count in SendInviteRequests')
+		return 
+	end
 	local max_invites = min(count, 5)
-	-- iterate over the first few entries requesting invites
+	local names_copy = {}
+	local r = nil
+	for i = 1, max_invites do
+		r = names[math.random( #names )]
+		--print("Random: r=", r)
+		names_copy[r] = true
+	end
+	local dumpout = {}
+	for k, v in pairs(names_copy) do
+		table.insert(dumpout, k)
+	end
+
+	ChatFrame_AddMessageEventFilter("CHAT_MSG_WHISPER_INFORM", JoineratorEngine.ChatFilterOutgoing)
+	for i = 1, #dumpout do
+		print("Whispering:", dumpout[i], "...")
+		JoineratorEngine.outgoings[dumpout[i]] = true
+		SendChatMessage("ginvite please", "WHISPER", "Common", dumpout[i]);
+	end
 end
 
+function JoineratorEngine:ChatFilterOutgoing(_, message, characterName, _)
+	--local arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12 = ...
+	--local current_player = UnitName("player")
+	--print("Player:", current_player)
+	--print("ChatFilter: event, ...", event, ...)
+	short_recipient, _ = strsplit( "-", characterName, 2 )
+	--print("Recipient, Me:", short_recipient, current_player)
+	if JoineratorEngine.outgoings[short_recipient] then
+		JoineratorEngine.outgoings[short_recipient] = nil
+		--print("Suppressed!", arg1, arg2)
+		return true
+	end
+	return false
+end
+
+function JoineratorEngine:ChatFilterIncoming(_, message, characterName, _)
+	-- local arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12 = ...
+	-- return true, ...
+	short_recipient, _ = strsplit( "-", characterName, 2 )
+	print("INBOUND:", message, short_recipient)
+	if not IsInGuild() then 
+		print("I'm not guilded")
+		return 
+	end
+
+	if message:find("ginv") then
+		print("found ginv")
+		local dialog = StaticPopup_Show("JoineratorGuildInvitePopup", characterName)
+		if (dialog) then
+			print('yay dialog')
+			dialog.data = characterName
+		end
+		return
+	end
+end
 
 function PrintArray(array)
 	if array == nil then

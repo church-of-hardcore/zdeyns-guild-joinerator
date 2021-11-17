@@ -86,14 +86,6 @@ function GuildJoinerator:CreateMainWindow()
 
 	dropdown:SetValue(self.db.profile.lastjointype or 1)
 
-	-- dropdown:SetText("Choose your destination")
-	dropdown:SetCallback("OnValueChanged", function(self, event, key)
-		print("Selected:", key)
-		--[[ for k, v in pairs(key) do
-			print(k, v)
-		end ]]
-	end)
-
 	self.dropdown_widget = dropdown
 
 	local button = self.AceGUI:Create("Button")
@@ -108,6 +100,7 @@ function GuildJoinerator:CreateMainWindow()
 	window:AddChild(dropdown)
 	window:AddChild(button)
 	window:AddChild(editbox)
+	-- print ("I am in a guild:", IsInGuild())
 
 end
 

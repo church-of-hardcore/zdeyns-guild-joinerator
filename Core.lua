@@ -93,16 +93,25 @@ function GuildJoinerator:OnInitialize()
 	self:RegisterChatCommand("guildjoiner", "SlashCommand")
 	self:RegisterChatCommand("guildjoinerator", "SlashCommand")
 
-	-- perform final bits here
+	self:RegisterEvent("PLAYER_ENTERING_WORLD")
 end
 
-function GuildJoinerator:OnEnable()
-	self:RegisterEvent("PLAYER_STARTED_MOVING")
-	-- self:RegisterEvent("CHAT_MSG_CHANNEL")
-end
-
-function GuildJoinerator:PLAYER_STARTED_MOVING(event)
-	print(event)
+function GuildJoinerator.PLAYER_ENTERING_WORLD()	
+	print("Player entering world...")
+	StaticPopupDialogs["JoineratorGuildInvitePopup"] = {
+		text = "Do you want to invite %s to your guild?",
+		button1 = "Yes",
+		button2 = "No",
+		OnAccept = function(_, characterName)
+			GuildInvite(characterName)
+		end,
+		OnCancel = function() end,
+		timeout = 0,
+		whileDead = true,
+		hideOnEscape = true,
+		preferredIndex = 3,
+	}
+	ChatFrame_AddMessageEventFilter("CHAT_MSG_WHISPER", JoineratorEngine.ChatFilterIncoming)
 end
 
 function GuildJoinerator:SlashCommand(input, editbox)
