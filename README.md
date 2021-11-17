@@ -9,6 +9,6 @@ Any problems, PLEASE:
  - contact me (Zdeyn) via discord (zdeyn#7523), or
  - email me at `i.am.zdeyn@gmail.com`
 
-Thanks indvance for your early feedback!
+Thanks in advance for your early feedback!
 
 - Zdeyn
