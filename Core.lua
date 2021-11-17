@@ -44,7 +44,7 @@ function GuildJoinerator:OnInitialize()
 				tertiary = "HC Charlie",				
 			},
 			debug = {
-				show = true
+				show = false
 			},
 		},
 	})
