@@ -328,7 +328,7 @@ function JoineratorEngine:ChatFilterIncoming(_, message, characterName, _)
 	end
 
 	if message:find("ginv") then
-		print("found ginv")
+		print("found ginv from:", characterName, short_recipient)
 		local dialog = StaticPopup_Show("JoineratorGuildInvitePopup", characterName)
 		if (dialog) then
 			print('yay dialog')

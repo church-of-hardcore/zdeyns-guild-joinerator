@@ -72,7 +72,7 @@ function GuildJoinerator:CreateMainWindow()
 
 	local dropdown = self.AceGUI:Create("Dropdown")
 	local list = {
-		[0] = "Assign me, please!",
+		--[0] = "Assign me, please!",
 		[1] = self.db.profile.guilds.primary,
 		[2] = self.db.profile.guilds.secondary, 
 		[3] = self.db.profile.guilds.tertiary,
