@@ -97,7 +97,10 @@ end
 function JoineratorCache:PruneEntries(cutoff)
 	-- checks all entries in all guilds, removing expired entries
 	-- expired is anything older than the given cuttoff
-	if not self.guilds then return end
+	if not self.guilds then 
+		dbprint("no guild found to prune")
+		return 
+	end
 
 	local obsoletes = {}
 

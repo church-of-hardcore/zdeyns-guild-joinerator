@@ -189,7 +189,7 @@ end
 end ]]
 
 function dbprint(msg, ...)
-	if self.db.profile.debug.show then
+	if GuildJoinerator.db.profile.debug.show then
 		print(msg, ...)
 	end
 end
