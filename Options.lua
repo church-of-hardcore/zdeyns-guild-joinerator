@@ -1,15 +1,4 @@
-GuildJoinerator.defaults = {
-	profile = {
-		lastJoinType = 0,
-		hideMinimapToggle = false,
-		primaryGuild = "Alpha",
-		usePrimaryGuild = true,
-		secondaryGuild = "Bravo",
-		useSecondaryGuild = true,
-		tertiaryGuild = "Charlie",
-		useTertiaryGuild = true,
-	},
-}
+
 
 -- https://www.wowace.com/projects/ace3/pages/ace-config-3-0-options-tables
 GuildJoinerator.options = {
@@ -71,6 +60,20 @@ GuildJoinerator.options = {
 						GuildJoinerator.db.profile.guilds.primary = value
 					end,
 				},
+				restrictPrimaryGuild = {
+					order = 3,
+					type = "toggle",
+					name = "Restrict search to 15+",
+					desc = "Only whisper people level 15+ for invites",
+					--width = "half",
+					get = function(info)
+						return GuildJoinerator.db.profile.guilds.restrictprimary
+					end,
+					set = function(info, value)
+						dbprint("Restrict Primary Toggled to: Use =", value)
+						GuildJoinerator.db.profile.guilds.restrictprimary = value
+					end,
+				},
 			},
 		},
 		secondaryGroup = {
@@ -108,6 +111,20 @@ GuildJoinerator.options = {
 						GuildJoinerator.db.profile.guilds.secondary = value
 					end,
 				},
+				restrictSecondaryGuild = {
+					order = 3,
+					type = "toggle",
+					name = "Restrict search to 15+",
+					desc = "Only whisper people level 15+ for invites",
+					--width = "half",
+					get = function(info)
+						return GuildJoinerator.db.profile.guilds.restrictsecondary
+					end,
+					set = function(info, value)
+						dbprint("Restrict Primary Toggled to: Use =", value)
+						GuildJoinerator.db.profile.guilds.restrictsecondary = value
+					end,
+				},
 			},
 		},
 		tertiaryGroup = {
@@ -143,6 +160,20 @@ GuildJoinerator.options = {
 					set = function(info, value)
 						dbprint("Tertiary Guild set to:", value)
 						GuildJoinerator.db.profile.guilds.tertiary = value
+					end,
+				},
+				restrictTertiaryGuild = {
+					order = 3,
+					type = "toggle",
+					name = "Restrict search to 15+",
+					desc = "Only whisper people level 15+ for invites",
+					--width = "half",
+					get = function(info)
+						return GuildJoinerator.db.profile.guilds.restricttertiary
+					end,
+					set = function(info, value)
+						dbprint("Restrict Primary Toggled to: Use =", value)
+						GuildJoinerator.db.profile.guilds.restricttertiary = value
 					end,
 				},
 			},

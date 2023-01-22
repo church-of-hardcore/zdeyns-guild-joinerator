@@ -1,4 +1,4 @@
-## Interface: 11401
+## Interface: 11403
 ## Version: 0.1.0
 ## Title: Zdeyn's Guild Joinerator
 ## Notes: Allows easy self-invites to appropriate Hardcore guilds

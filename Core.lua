@@ -39,12 +39,15 @@ function GuildJoinerator:OnInitialize()
 				useprimary = true,
 				usesecondary = true,
 				usetertiary = true,
-				primary = "HC Alpha",
-				secondary = "HC Bravo",
-				tertiary = "HC Charlie",				
+				primary = "HC Cadets",
+				secondary = "HC Reserves",
+				tertiary = "HC Militia",
+				restrictprimary = true,
+				restrictsecondary = true,
+				restricttertiary = true,
 			},
 			debug = {
-				show = false
+				show = true
 			},
 		},
 	})

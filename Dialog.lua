@@ -117,14 +117,18 @@ function GuildJoinerator:JoinButton_OnClick()
 	self.db.profile.lastjointype = value
 	dbprint("Got:", value, "from dropdown")
 	local guild = nil
+	local restricted = false
 	if value == 1 then
 		guild = self.db.profile.guilds.primary
+		restricted = self.db.profile.guilds.restrictprimary
 		dbprint("Using Primary:", guild)
 	elseif value == 2 then
 		guild = self.db.profile.guilds.secondary
+		restricted = self.db.profile.guilds.restrictsecondary
 		dbprint("Using Secondary:", guild)
 	elseif value == 3 then
-		guild = self.db.profile.guilds.tertiary
+		guild = self.db.profile.guilds.tertiary	
+		restricted = self.db.profile.guilds.restricttertiary
 		dbprint("Using Tertiary:", guild)
 	else
 		guild = nil
@@ -132,8 +136,9 @@ function GuildJoinerator:JoinButton_OnClick()
 	end
 	JoineratorEngine:Init()
 	dbprint("Guild:", guild)
+	dbprint("Restricted:", restricted)
 	if guild then
-		JoineratorEngine:StartSingleSearchStrategy(guild)
+		JoineratorEngine:StartSingleSearchStrategy(guild, restricted)
 	else
 		dbprint("Probably attempting a multi-search")
 	end

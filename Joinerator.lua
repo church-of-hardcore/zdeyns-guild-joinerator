@@ -122,7 +122,7 @@ function JoineratorCache:PruneEntries(cutoff)
 
 end
 
--- -- -- [[ GuildJoiner ]] -- -- --
+-- -- -- [[ GuildJoinerator ]] -- -- --
 
 JoineratorEngine = {
 	["version"] = "0.1",
@@ -229,9 +229,13 @@ function JoineratorEngine:Pump()
 	-- dbprint("JoineratorEngine:Pump() - Pumping!")
 end
 
-function JoineratorEngine:StartSingleSearchStrategy(target_guild)
+function JoineratorEngine:StartSingleSearchStrategy(target_guild, restricted)
 	-- configure the search to look for members of given guild	
 	local pattern = 'g-"' .. target_guild .. '"'
+	if restricted then
+		pattern = ' 15-'
+	end
+	dbprint(pattern)
 
 	self.target_guild = target_guild
 	self.strategy = self.STRATEGIES.SINGLE
