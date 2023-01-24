@@ -41,7 +41,7 @@ GuildJoinerator.options = {
 						return GuildJoinerator.db.profile.guilds.useprimary
 					end,
 					set = function(info, value)
-						dbprint("Use Primary Toggled to: Use =", value)
+						GuildJoinerator:dbprint("Use Primary Toggled to: Use =", value)
 						GuildJoinerator.db.profile.guilds.useprimary = value
 						GuildJoinerator.options.args.primaryGroup.args.primaryGuild.disabled = not value
 					end,
@@ -56,7 +56,7 @@ GuildJoinerator.options = {
 						return GuildJoinerator.db.profile.guilds.primary
 					end,
 					set = function(info, value)
-						dbprint("Primary Guild set to:", value)
+						GuildJoinerator:dbprint("Primary Guild set to:", value)
 						GuildJoinerator.db.profile.guilds.primary = value
 					end,
 				},
@@ -70,7 +70,7 @@ GuildJoinerator.options = {
 						return GuildJoinerator.db.profile.guilds.restrictprimary
 					end,
 					set = function(info, value)
-						dbprint("Restrict Primary Toggled to: Use =", value)
+						GuildJoinerator:dbprint("Restrict Primary Toggled to: Use =", value)
 						GuildJoinerator.db.profile.guilds.restrictprimary = value
 					end,
 				},
@@ -92,7 +92,7 @@ GuildJoinerator.options = {
 						return GuildJoinerator.db.profile.guilds.usesecondary
 					end,
 					set = function(info, value)
-						dbprint("Use Secondary Toggled to: Use =", value)
+						GuildJoinerator:dbprint("Use Secondary Toggled to: Use =", value)
 						GuildJoinerator.db.profile.guilds.usesecondary = value
 						GuildJoinerator.options.args.secondaryGroup.args.secondaryGuild.disabled = not value
 					end,
@@ -107,7 +107,7 @@ GuildJoinerator.options = {
 						return GuildJoinerator.db.profile.guilds.secondary
 					end,
 					set = function(info, value)
-						dbprint("Secondary Guild set to:", value)
+						GuildJoinerator:dbprint("Secondary Guild set to:", value)
 						GuildJoinerator.db.profile.guilds.secondary = value
 					end,
 				},
@@ -121,7 +121,7 @@ GuildJoinerator.options = {
 						return GuildJoinerator.db.profile.guilds.restrictsecondary
 					end,
 					set = function(info, value)
-						dbprint("Restrict Primary Toggled to: Use =", value)
+						GuildJoinerator:dbprint("Restrict Primary Toggled to: Use =", value)
 						GuildJoinerator.db.profile.guilds.restrictsecondary = value
 					end,
 				},
@@ -143,7 +143,7 @@ GuildJoinerator.options = {
 						return GuildJoinerator.db.profile.guilds.usetertiary
 					end,
 					set = function(info, value)
-						dbprint("Use Tertiary Toggled to: Use =", value)
+						GuildJoinerator:dbprint("Use Tertiary Toggled to: Use =", value)
 						GuildJoinerator.db.profile.guilds.usetertiary = value
 						GuildJoinerator.options.args.tertiaryGroup.args.tertiaryGuild.disabled = not value
 					end,
@@ -158,7 +158,7 @@ GuildJoinerator.options = {
 						return GuildJoinerator.db.profile.guilds.tertiary
 					end,
 					set = function(info, value)
-						dbprint("Tertiary Guild set to:", value)
+						GuildJoinerator:dbprint("Tertiary Guild set to:", value)
 						GuildJoinerator.db.profile.guilds.tertiary = value
 					end,
 				},
@@ -172,7 +172,7 @@ GuildJoinerator.options = {
 						return GuildJoinerator.db.profile.guilds.restricttertiary
 					end,
 					set = function(info, value)
-						dbprint("Restrict Primary Toggled to: Use =", value)
+						GuildJoinerator:dbprint("Restrict Primary Toggled to: Use =", value)
 						GuildJoinerator.db.profile.guilds.restricttertiary = value
 					end,
 				},
@@ -188,7 +188,7 @@ GuildJoinerator.options = {
 				return GuildJoinerator.db.profile.minimap.hide
 			end,
 			set = function(info, value)
-				dbprint("Minimap Toggled to: Hidden =", value)
+				GuildJoinerator:dbprint("Minimap Toggled to: Hidden =", value)
 				GuildJoinerator.db.profile.minimap.hide = value
 				GuildJoinerator:UpdateMinimap()
 			end,
@@ -203,5 +203,5 @@ end
 
 function GuildJoinerator:SetValue(info, value)
 	self.db.profile[info[#info]] = value
-	dbprint("The " .. info[#info] .. " was set to: " .. tostring(value))
+	GuildJoinerator:dbprint("The " .. info[#info] .. " was set to: " .. tostring(value))
 end

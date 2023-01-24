@@ -102,7 +102,7 @@ function GuildJoinerator:CreateMainWindow()
 	window:AddChild(dropdown)
 	window:AddChild(button)
 	-- window:AddChild(editbox)
-	dbprint("I am in a guild:", IsInGuild())
+	GuildJoinerator:dbprint("I am in a guild:", IsInGuild())
 
 end
 
@@ -115,32 +115,32 @@ function GuildJoinerator:JoinButton_OnClick()
 
 	local value = self.dropdown_widget:GetValue()
 	self.db.profile.lastjointype = value
-	dbprint("Got:", value, "from dropdown")
+	GuildJoinerator:dbprint("Got:", value, "from dropdown")
 	local guild = nil
 	local restricted = false
 	if value == 1 then
 		guild = self.db.profile.guilds.primary
 		restricted = self.db.profile.guilds.restrictprimary
-		dbprint("Using Primary:", guild)
+		GuildJoinerator:dbprint("Using Primary:", guild)
 	elseif value == 2 then
 		guild = self.db.profile.guilds.secondary
 		restricted = self.db.profile.guilds.restrictsecondary
-		dbprint("Using Secondary:", guild)
+		GuildJoinerator:dbprint("Using Secondary:", guild)
 	elseif value == 3 then
 		guild = self.db.profile.guilds.tertiary	
 		restricted = self.db.profile.guilds.restricttertiary
-		dbprint("Using Tertiary:", guild)
+		GuildJoinerator:dbprint("Using Tertiary:", guild)
 	else
 		guild = nil
-		dbprint("not found")
+		GuildJoinerator:dbprint("not found")
 	end
 	JoineratorEngine:Init()
-	dbprint("Guild:", guild)
-	dbprint("Restricted:", restricted)
+	GuildJoinerator:dbprint("Guild:", guild)
+	GuildJoinerator:dbprint("Restricted:", restricted)
 	if guild then
 		JoineratorEngine:StartSingleSearchStrategy(guild, restricted)
 	else
-		dbprint("Probably attempting a multi-search")
+		GuildJoinerator:dbprint("Probably attempting a multi-search")
 	end
 end
 

@@ -102,7 +102,7 @@ function GuildJoinerator:OnInitialize()
 end
 
 function GuildJoinerator.PLAYER_ENTERING_WORLD()	
-	dbprint("Player entering world...")
+	GuildJoinerator:dbprint("Player entering world...")
 
 	StaticPopupDialogs["JoineratorGuildInvitePopup"] = {
 		text = "Do you want to invite %s to your guild?",
@@ -130,7 +130,7 @@ function GuildJoinerator:SlashCommand(input, editbox)
 	elseif input == "toggle" then
 		self:ToggleMinimap()
 		local state = (self.db.profile.minimap.hide and 'Hidden') or 'Shown'
-		dbprint(COLORS.HEIRLOOM .. "Guild Joinerator:" .. COLORS.NORMAL .. state)
+		GuildJoinerator:dbprint(COLORS.HEIRLOOM .. "Guild Joinerator:" .. COLORS.NORMAL .. state)
 	
 	--elseif input == "join" then
 	--	print("I'd join something, but I don't know how yet")
@@ -144,26 +144,26 @@ function GuildJoinerator:SlashCommand(input, editbox)
 end
 
 function GuildJoinerator:ToggleMainWindow()
-	dbprint("Toggling Main Window")
+	GuildJoinerator:dbprint("Toggling Main Window")
 	if self.main_window_exists then
-		dbprint("Closing..")
+		GuildJoinerator:dbprint("Closing..")
         GuildJoinerator:DestroyMainWindow()
     else
-		dbprint("Opening..")
+		GuildJoinerator:dbprint("Opening..")
         GuildJoinerator:CreateMainWindow()
     end
 end
 
 function GuildJoinerator:ToggleMinimap()
-	dbprint("Toggling! Initial value:", self.db.profile.minimap.hide)
+	GuildJoinerator:dbprint("Toggling! Initial value:", self.db.profile.minimap.hide)
 	self.db.profile.minimap.hide = not self.db.profile.minimap.hide
 	
-	dbprint("After value:", self.db.profile.minimap.hide)
+	GuildJoinerator:dbprint("After value:", self.db.profile.minimap.hide)
 	GuildJoinerator:UpdateMinimap()
 end
 
 function GuildJoinerator:UpdateMinimap()
-	dbprint("UPDATING MINI-MAP: Hidden = " ..tostring(self.db.profile.minimap.hide))
+	GuildJoinerator:dbprint("UPDATING MINI-MAP: Hidden = " ..tostring(self.db.profile.minimap.hide))
 	if self.db.profile.minimap.hide then 
 		self.icon:Hide("GuildJoinerator")
 	else
@@ -191,7 +191,7 @@ end
     end
 end ]]
 
-function dbprint(msg, ...)
+function GuildJoinerator:dbprint(msg, ...)
 	if GuildJoinerator.db.profile.debug.show then
 		print(msg, ...)
 	end
