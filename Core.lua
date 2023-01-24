@@ -105,7 +105,7 @@ function GuildJoinerator.PLAYER_ENTERING_WORLD()
 	GuildJoinerator:dbprint("Player entering world...")
 
 	StaticPopupDialogs["JoineratorGuildInvitePopup"] = {
-		text = "Do you want to invite %s to your guild?",
+		text = "%s has requested an invite to your guild. Do you wish to invite them?",
 		button1 = "Yes",
 		button2 = "No",
 		OnAccept = function(_, characterName)
